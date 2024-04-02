@@ -48,19 +48,18 @@ def create_index_for_collection(collection_name, field_name, index_params):
     print(f"Index created for field '{field_name}' in collection '{collection_name}'.")
 
 def insert_embeddings(collection_name, text_ids, embeddings):
-    """
-    Inserts text embeddings into the specified Milvus collection.
-
-    Parameters:
-    - collection_name (str): The name of the Milvus collection to insert data into.
-    - text_ids (list[int]): A list of unique identifiers for each text segment.
-    - embeddings (list[list[float]]): A list of embedding vectors for each text segment.
-    """
     collection = Collection(name=collection_name)
-    entities = [text_ids, embeddings]  # Adjusted to match the expected input format
+    # Prepare data for insertion: separate lists for each field in the schema
+    # Here, we assume your collection schema has 'text_id' and 'embedding' fields
+    entities = [
+        # First field: 'text_id'
+        text_ids,
+        # Second field: 'embedding'
+        embeddings,
+    ]
     insert_result = collection.insert(entities)
     print(f"Inserted {len(text_ids)} embeddings into collection '{collection_name}'.")
-
+   
 def load_collection_into_memory(collection_name):
     """
     Loads the specified collection into memory to prepare for search operations.

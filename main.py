@@ -1,4 +1,4 @@
-from extract_text import extract_pdf_text
+from extract_text import segment_pdf
 import configparser
 import openai
 
@@ -34,14 +34,14 @@ if __name__ == "__main__":
     create_index_for_collection(collection_name, "embedding", index_params)
 
     # Step 3: Extract text from PDF
-    extracted_text = extract_pdf_text(pdf_path)
+    segments = segment_pdf(pdf_path)
     # Assuming a single block of text for simplicity, split or process as needed
 
     # Step 4: Generate embeddings (placeholder)
-    embeddings = [generate_text_embeddings(extracted_text)]  # Modify as needed for real embeddings generation
+    embeddings = [generate_text_embeddings(segment) for segment in segments]
 
     # Step 5: Insert embeddings into Milvus
-    text_ids = [1]  # Unique IDs for each text segment, generate or modify as needed
+    text_ids = list(range(1, len(segments) + 1))
     insert_embeddings(collection_name, text_ids, embeddings)
 
     # After inserting embeddings and before searching
