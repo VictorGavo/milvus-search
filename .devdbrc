@@ -1,0 +1,10 @@
+[
+  {
+    "type": "sqlite",
+    "path": "c:\\Users\\Victo\\Code\\KLST-Internship\\interview_task\\documents.db"
+  },
+  {
+    "type": "sqlite",
+    "path": "c:\\Users\\Victo\\Code\\KLST-Internship\\interview_task\\text.db"
+  }
+]
