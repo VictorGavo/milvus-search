@@ -1,10 +1,10 @@
-from flask import Flask
+from flask import Flask, session
 from api.routes import create_api_blueprint
 from util.milvus_operations import connect_to_milvus
 import os
 
 app = Flask(__name__)
-
+app.secret_key = os.urandom(24)
 # Establish connection to Milvus
 connect_to_milvus()
 

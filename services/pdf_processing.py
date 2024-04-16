@@ -1,5 +1,4 @@
 import fitz
-import openai
 import configparser
 import hashlib
 import os
@@ -7,12 +6,11 @@ import sqlite3
 import hashlib
 import datetime
 
+from services.openai_services import generate_text_embeddings
 from util.milvus_operations import initialize_milvus_system, search_embeddings, milvus_insert, load_collection_into_memory
 
 config = configparser.ConfigParser()
 config.read('config.ini')
-open_api_key = config.get('openai', 'api_key')
-openai.api_key = open_api_key
 
 def segment_pdf(pdf_path):
     """
@@ -31,24 +29,6 @@ def segment_pdf(pdf_path):
         text = page.get_text()
         text_segments.append((page_num, text))
     return text_segments
-
-def generate_text_embeddings(text):
-    """
-    Generate embeddings for the given text using OpenAI's API.
-
-    Parameters:
-    - text (str): Text to generate embeddings for.
-
-    Returns:
-    - Embedding vector.
-    """
-
-    response = openai.embeddings.create(
-        input=text,
-        model="text-embedding-3-small"
-    )
-
-    return response.data[0].embedding
 
 def generate_unique_id(pdf_path, page_num):
     """

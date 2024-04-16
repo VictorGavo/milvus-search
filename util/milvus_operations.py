@@ -84,6 +84,24 @@ def load_collection_into_memory(collection_name):
     print(f"Collection '{collection_name}' loaded into memory.")
 
 def search_embeddings(collection_name, query_embeddings, top_k=3):
+    """
+    Searches the specified Milvus collection for the top 'k' embeddings closest to the given query embeddings.
+
+    Inputs:
+    - collection_name (str): The name of the Milvus collection to search.
+    - query_embeddings (list): A list of embeddings representing the query or queries.
+    - top_k (int, optional): The number of top closest results to retrieve. Defaults to 3.
+
+    Processes:
+    - Retrieves the specified collection.
+    - Sets the search parameters, including the metric type and the number of probes for searching.
+    - Performs the search on the specified 'anns_field' with the given embeddings and parameters.
+    - Formats the search results to include scores, Milvus IDs, and associated text IDs.
+
+    Outputs:
+    - List of dictionaries, where each dictionary contains 'score', 'id', and 'text_id' of the search hits.
+    - This format facilitates the serialization and response handling in the API.
+    """
     collection = Collection(name=collection_name)
     search_params = {"metric_type": "L2", "params": {"nprobe": 10}}
     results = collection.search(
@@ -105,14 +123,6 @@ def search_embeddings(collection_name, query_embeddings, top_k=3):
             })
     
     return processed_results
-
-
-def disconnect_milvus():
-    """
-    Disconnects from the Milvus database.
-    """
-    connections.disconnect("default")
-    print("Disconnected from Milvus.")
 
 def initialize_milvus_system(collection_name, dim=1536):
     """
@@ -136,4 +146,10 @@ def initialize_milvus_system(collection_name, dim=1536):
         }
         create_index_for_collection(collection_name, field_name, index_params)
 
+def disconnect_milvus():
+    """
+    Disconnects from the Milvus database.
+    """
+    connections.disconnect("default")
+    print("Disconnected from Milvus.")
 
